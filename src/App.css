@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: slidein infinite 10s linear;
   height: 40vmin;
   pointer-events: none;
 }
@@ -19,6 +19,10 @@
   color: white;
 }
 
+.App-body {
+
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -30,4 +34,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+@keyframes slidein {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }

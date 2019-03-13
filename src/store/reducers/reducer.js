@@ -22,13 +22,30 @@ const reducer = (state = initialState, action) => {
 			};
 
 		case actionTypes.TO_WATCHED:
-			let moved = action.payload;
-			let newWatchls = state.watchlist.filter(mov => {
-				return moved !== mov;
+			let ls1 = state.watchlist.filter(mov => {
+				return action.payload !== mov;
 			});
-			let watchedls = state.watched.concat(moved);
+			let ls2 = state.watched.concat(action.payload);
 
 			return {
+				...state,
+
+				watchlist: ls1,
+				watchlistFiltered: ls1,
+
+				watched: ls2,
+				watchedFiltered: ls2
+			};
+
+		case actionTypes.TO_WATCHLIST:
+			let watchedls = state.watched.filter(mov => {
+				return action.payload !== mov;
+			});
+			let newWatchls = state.watchlist.concat(action.payload);
+
+			return {
+				...state,
+
 				watchlist: newWatchls,
 				watchlistFiltered: newWatchls,
 
@@ -36,19 +53,26 @@ const reducer = (state = initialState, action) => {
 				watchedFiltered: watchedls
 			};
 
-		case actionTypes.TO_WATCHLIST:
-			let moved = action.payload;
-			let newWatchls = state.watched.filter(mov => {
-				return moved !== mov;
+		case actionTypes.WATCH_LIST_DEL:
+			let delWatchlist = state.watchlist.filter(mov => {
+				return action.payload !== mov;
 			});
-			let watchedls = state.watchlist.concat(moved);
-
 			return {
-				watchlist: newWatchls,
-				watchlistFiltered: newWatchls,
+				...state,
 
-				watched: watchedls,
-				watchedFiltered: watchedls
+				watchlist: delWatchlist,
+     			watchlistFiltered: delWatchlist,
+			};
+
+		case actionTypes.WATCHED_DEL:
+			let delWatchEDlist = state.watched.filter(mov => {
+				return action.payload !== mov;
+			});
+			return {
+				...state,
+				
+				watched: delWatchEDlist,
+     			watchedFiltered: delWatchEDlist,
 			};
 
 		default:

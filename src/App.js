@@ -4,88 +4,68 @@ import "./App.css";
 
 import SearchBar from "./SearchBar"
 
+import { connect } from 'react-redux'
+
+import * as actionCreators from "./store/actions/index"
 
 class App extends Component {
   state = {
-    movie: "",
-    watchlist: ["Avengers", "Batman", "Hitman",],
-    watchlistFiltered: ["Avengers", "Batman", "Hitman",],
-
-    watched: ["The Matrix", "Lord of the Ring",],
-    watchedFiltered: ["The Matrix", "Lord of the Ring",],
+    addedMov: "",
   };
 
   handleChange = event => {
-    this.setState({ movie: event.target.value });
+    console.log(event.target.value)
+    this.setState({ addedMov: event.target.value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    let val = this.state.movie;
-    let ls = this.state.watchlist.concat(val);
+    let val = this.state.addedMov;
+    if (!val) return
+
+    this.props.addMovie(val)
+
+    // let ls = this.state.watchlist.concat(val);
     
-    this.setState({ 
-      watchlist: ls,
-      watchlistFiltered: ls,
-      movie: "",
-    });
+    // this.setState({ 
+    //   watchlist: ls,
+    //   watchlistFiltered: ls,
+    //   movie: "",
+    // });
   };
 
   toWatched = moved => {
-    let newWatchls = this.state.watchlist.filter(mov => {
-      return moved !== mov;
-    });
-    let watchedls = this.state.watched.concat(moved);
-
-    // let filtered = this.state.watchlistFiltered
-    // if (this.state.watchlist.length !== this.state.watchlistFiltered.length) {
-    //   filtered = filtered.filter(mov => mov !== moved)
-    // }
-
-    this.setState({
-      watchlist: newWatchls,
-      watchlistFiltered: filtered,
-
-      watched: watchedls,
-      watchedFiltered: watchedls,
-    });
+    this.props.toWatched(moved)
   };
 
   toWatchList = moved => {
-    let watchedls = this.state.watched.filter(mov => {
-      return moved !== mov;
-    });
-    let newWatchls = this.state.watchlist.concat(moved);
-
-    this.setState({
-      watchlist: newWatchls,
-      watchlistFiltered: newWatchls,
-
-      watched: watchedls,
-      watchedFiltered: watchedls,
-    });
+    this.props.toWatchlist(moved)
   };
 
   watchListDel = delMov => {
-    let newWatchls = this.state.watchlist.filter(mov => {
-      return delMov !== mov;
-    });
+    // let newWatchls = this.state.watchlist.filter(mov => {
+    //   return delMov !== mov;
+    // });
 
-    this.setState({
-     watchlist: newWatchls,
-     watchlistFiltered: newWatchls,
-   });
+    this.props.watchListDel(delMov)
+   //  this.setState({
+   //   watchlist: newWatchls,
+   //   watchlistFiltered: newWatchls,
+   // });
+
   };
 
   watchedDel = delMov => {
-    let watchedls = this.state.watched.filter(mov => {
-      return delMov !== mov;
-    });
+    // let watchedls = this.state.watched.filter(mov => {
+    //   return delMov !== mov;
+    // });
 
-    this.setState({ 
-      watched: watchedls,
-      watchedFiltered: watchedls,
-    });
+    // this.setState({ 
+    //   watched: watchedls,
+    //   watchedFiltered: watchedls,
+    // });
+
+    this.props.watchedDel(delMov)
   };
 
 
@@ -116,29 +96,30 @@ class App extends Component {
 
   render() {
 
-    let ctrWatchls = this.state.watchlistFiltered.length
-    let ctrWatchedls = this.state.watchedFiltered.length
 
-    let watchlistRows = this.state.watchlistFiltered.map(mov => {
+    let ctrWatchls = this.props.watchlistFiltered.length
+    let ctrWatchedls = this.props.watchedFiltered.length
+
+    let watchlistRows = this.props.watchlistFiltered.map(mov => {
       return (
         <tr>
           <td>{mov}</td>
           <td>
           <div className="row">
               <div className="col-6">
-                <a
+                <button
                   onClick={() => this.toWatched(mov)}
                   className="mx-1 btn btn-secondary">
                   Watched
-                </a>
+                </button>
               </div>
 
               <div className="col-6">
-              <a
+              <button
                 onClick={() => this.watchListDel(mov)}
                 className="btn btn-danger">
                 Delete
-              </a>
+              </button>
             </div>
           </div>
 
@@ -147,28 +128,28 @@ class App extends Component {
       );
     });
 
-    let watchedRows = this.state.watchedFiltered.map(mov => {
+    let watchedRows = this.props.watchedFiltered.map(mov => {
       return (
         <tr>
           <td>{mov}</td>
           <td>
           <div className="row">
             <div className="col-6">
-            <a
+            <button
               onClick={() => this.toWatchList(mov)}
               className="btn btn-secondary"
             >
               Unwatched
-            </a>
+            </button>
             </div>
 
              <div className="col-6">
-            <a
+            <button
               onClick={() => this.watchedDel(mov)}
               className="btn btn-danger"
             >
               Delete
-            </a>
+            </button>
             </div>
           </div>
           </td>
@@ -195,7 +176,7 @@ class App extends Component {
                   className="form-control"
                   placeholder="Movie..."
                   onChange={this.handleChange}
-                  value={this.state.movie}
+                  value={this.state.query}
                 />
 
                 <div className="input-group-append">
@@ -265,4 +246,29 @@ class App extends Component {
   }
 }
 
-export default App;
+
+const mapStateToProps = state => {
+  return {
+    movie: state.movie,
+    watchlist: state.watchlist,
+    watchlistFiltered: state.watchlistFiltered,
+    watched: state.watched,
+    watchedFiltered: state.watchedFiltered,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addMovie: mov => dispatch(actionCreators.addMovie(mov)),
+    
+    toWatched: mov => dispatch(actionCreators.toWatched(mov)),
+    toWatchlist: mov => dispatch(actionCreators.toWatchlist(mov)),
+    
+    watchListDel: mov => dispatch(actionCreators.watchListDel(mov)),
+    watchedDel: mov => dispatch(actionCreators.watchedDel(mov)),
+
+
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);

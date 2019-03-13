@@ -24,14 +24,6 @@ class App extends Component {
     if (!val) return
 
     this.props.addMovie(val)
-
-    // let ls = this.state.watchlist.concat(val);
-    
-    // this.setState({ 
-    //   watchlist: ls,
-    //   watchlistFiltered: ls,
-    //   movie: "",
-    // });
   };
 
   toWatched = moved => {
@@ -43,28 +35,11 @@ class App extends Component {
   };
 
   watchListDel = delMov => {
-    // let newWatchls = this.state.watchlist.filter(mov => {
-    //   return delMov !== mov;
-    // });
 
     this.props.watchListDel(delMov)
-   //  this.setState({
-   //   watchlist: newWatchls,
-   //   watchlistFiltered: newWatchls,
-   // });
-
   };
 
   watchedDel = delMov => {
-    // let watchedls = this.state.watched.filter(mov => {
-    //   return delMov !== mov;
-    // });
-
-    // this.setState({ 
-    //   watched: watchedls,
-    //   watchedFiltered: watchedls,
-    // });
-
     this.props.watchedDel(delMov)
   };
 
@@ -250,8 +225,10 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     movie: state.movie,
+    
     watchlist: state.watchlist,
     watchlistFiltered: state.watchlistFiltered,
+    
     watched: state.watched,
     watchedFiltered: state.watchedFiltered,
   }

@@ -1,31 +1,14 @@
 import React, { Component } from "react";
 import logo from "./logo-fancy.svg";
 import SearchBar from "./SearchBar"
+import MovieAdd from "./MovieAdd"
 
 import { connect } from 'react-redux'
 
 import * as actionCreators from "./store/actions/index"
 
 class App extends Component {
-  state = {
-    addedMov: "",
-  };
-
-  handleChange = event => {
-    console.log(event.target.value)
-    this.setState({ addedMov: event.target.value });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    let val = this.state.addedMov;
-    if (!val) return
-
-    this.props.addMovie(val)
-
-    this.setState({addedMov: ""})
-  };
-
+  
   toWatched = moved => {
     this.props.toWatched(moved)
   };
@@ -145,23 +128,8 @@ class App extends Component {
             {
               // ADD a Movie
             }
-          <form onSubmit={this.handleSubmit}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Movie..."
-                  onChange={this.handleChange}
-                  value={this.state.addedMov}
-                />
-
-                <div className="input-group-append">
-                  <button className="btn btn-secondary">
-                    + Add
-                  </button>
-                 </div>
-              </div>
-            </form>
+            
+            <MovieAdd />
 
             {
               // ==================

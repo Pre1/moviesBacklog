@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import logo from "./logo-fancy.svg";
-import "./App.css";
-
 import SearchBar from "./SearchBar"
 
 import { connect } from 'react-redux'
@@ -24,6 +22,8 @@ class App extends Component {
     if (!val) return
 
     this.props.addMovie(val)
+
+    this.setState({addedMov: ""})
   };
 
   toWatched = moved => {
@@ -134,11 +134,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
+        <header className="container">
           
-          <img src={logo} className="App-logo" alt="logo" />
-
-          <h1>Movie Wish List project</h1>
+          <div className="text-center">
+          <img src={logo} className="App-logo " alt="logo" />
+          </div>
+          <h1 className="text-center">Movie Wish List project</h1>
           <hr />
           <div className="content">
             {
@@ -151,7 +152,7 @@ class App extends Component {
                   className="form-control"
                   placeholder="Movie..."
                   onChange={this.handleChange}
-                  value={this.state.query}
+                  value={this.state.addedMov}
                 />
 
                 <div className="input-group-append">

@@ -61,7 +61,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 
 				watchlist: delWatchlist,
-     			watchlistFiltered: delWatchlist,
+				watchlistFiltered: delWatchlist
 			};
 
 		case actionTypes.WATCHED_DEL:
@@ -70,9 +70,27 @@ const reducer = (state = initialState, action) => {
 			});
 			return {
 				...state,
-				
+
 				watched: delWatchEDlist,
-     			watchedFiltered: delWatchEDlist,
+				watchedFiltered: delWatchEDlist
+			};
+
+		case actionTypes.FILTER_WATCHLS:
+			let filterWls = state.watchlist.filter(mov => {
+				return mov.toLowerCase().includes(action.payload);
+			});
+			return {
+				...state,
+				watchlistFiltered: filterWls
+			};
+
+		case actionTypes.FILTER_WATCHEDLS:
+			let filterWedls = state.watched.filter(mov => {
+				return mov.toLowerCase().includes(action.payload);
+			});
+			return {
+				...state,
+				watchedFiltered: filterWedls
 			};
 
 		default:
